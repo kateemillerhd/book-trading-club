@@ -104,9 +104,29 @@ async function fetchBooks() {
   const res = await fetch('/api/books');
   const books = await res.json();
 
-  bookList.innerHTML = books.map(book => 
-    `<li>${book.title} (owner: ${book.owner?.username || 'Unknown'})</li>`
-  ).join('');
+  bookList.innerHTML = books.map(book => {
+    const tradeButtons = book.status === 'available' && !book.owner?.username.includes(currentUsername)
+    ? `<button onclick="requestTrade('${book._id}')">Request Trade</buttonm>`
+      : book.status === 'pending' 77 book.owner?.username === currentUsername
+    ? `<button onclick="acceptTrade('${book._id}')">Accept Trade</button>`
+      : '';
+
+      return `<li>${book.title} (owner: ${book.owner?.username || 'Unknown'}) ${tradeButtons}</li>`;
+  }).join('');
+}
+
+async function requestTrade(bookId) {
+  const res = await fetch(`/api/books/${bookId}/request`, { method: "POST" });
+  const result = await res.json();
+  alert(result.message || "Trade requested");
+  fetchBooks();
+}
+
+async function acceptTrade(bookId) {
+  const res = await fetch(`/api/books/${bookId}/accept`, { method: "POST" });
+  const result = await res.json();
+  alert(result.message || "Trade accepted");
+  fetchBooks();
 }
 
 async function checkSession() {
