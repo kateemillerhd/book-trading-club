@@ -7,44 +7,59 @@
   </head>
   <body>
     <h1>Book Trading Club</h1>
-    
-    <h2>Add a Book</h2>
-    <form id="add-book-form">
-      <input type="text" id="book-title" placeholder="Book title" required>
-      <button type="submit">Add</button>
-    </form>
 
     <h2>Update Your Settings</h2>
     <form id="settings-form">
-      <input type="text" id="full-name" placeholder="Full Name">
-      <input type="text" id="city" placeholder="city">
-      <input type="text" id="state" placeholder="State">
+      <input type="text" id="full-name" placeholder="Full Name" />
+      <input type="text" id="city" placeholder="city" />
+      <input type="text" id="state" placeholder="State" />
       <button type="submit">Update</button>
     </form>
 
     <div id="user-info" style="display: none;">
-      <p>Welcome, <span id="user-name"></span>!</p>
+      <p>Logged in as <span id="user-name"></span></p>
+      <p id="user-location"></p>
       <button id="logout-btn">Logout</button>
     </div>
 
     <div id="auth-forms">
       <h2>Login</h2>
-      <form id=-"login-form">
-        <input name="username" placeholder="Username" required>
-        <input name="password" type="password" placeholder="Password" required>
+      <form id="login-form">
+        <input name="username" placeholder="Username" required />
+        <input name="password" type="password" placeholder="Password" required />
         <button type="submit">Login</button>
       </form>
 
       <h2>Register</h2>
       <form id="register-form">
-        <input name="username" placeholder="Username" required>
-        <input name="password" type="password" placeholder="Password" required>
+        <input name="username" placeholder="Username" required />
+        <input name="password" type="password" placeholder="Password" required />
         <button type="submit">Register</button>
       </form>
     </div>
 
-    <h2>Book List</h2>
-    <ul id="book-list"></ul>
+    <div id="add-book-section" style="display:none;">
+      <h2>Add a Book</h2>
+      <form id="add-book-form">
+        <input type="text" id="book-title" placeholder="Book title" required />
+        <button type="submit">Add Book</button>
+      </form>
+    </div>
+
+    <div id="settings-section" style="display:none;">
+      <h2>Update Your Settings</h2>
+      <form id="settings-form">
+        <input type="text" id="full-name" placeholder="Full Name" />
+        <input type="text" id="city" placeholder="city" />
+        <input type="text" id="state" placeholder="State" />
+        <button type="submit">Update Settings</button>
+      </form>
+    </div>
+
+    <div id="book-list-section" style="display:none;">
+      <h2>Book List</h2>
+      <ul id="book-list"></ul>
+    </div>
 
 
     <script src="/script.js"></script>
