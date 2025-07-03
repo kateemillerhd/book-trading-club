@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Book Trading Club</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <h1>Book Trading Club</h1>
+    <p>
+      This is the starter boilerplate. Build out the UI and connect to the API
+      routes!/
+    </p>
+    <h2>Add a Book</h2>
+    <form id="add-book-form">
+      <input type="text" id="book-title" placeholder="Book title" required>
+      <button type="submit">Add</button>
+    </form>
+
+    <h2>Update Your Settings</h2>
+    <form id="settings-form">
+      <input type="text" id="full-name" placeholder="Full Name">
+      <input type="text" id="city" placeholder="city">
+      <input type="text" id="state" placeholder="State">
+      <button type="submit">Update</button>
+    </form>
+
+    <div id="user-info" style="display: none;">
+      <p>Welcome, <span id="user-name"></span>!</p>
+      <button id="logout-btn">Logout</button>
+    </div>
+
+    <div id="auth-forms">
+      <h2>Login</h2>
+      <form id=-"login-form">
+        <input name="username" placeholder="Username" required>
+        <input name="password" type="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+
+      <h2>Register</h2>
+      <form id="register-form">
+        <input name="username" placeholder="Username" required>
+        <input name="password" type="password" placeholder="Password" required>
+        <button type="submit">Register</button>
+      </form>
+    </div>
+
+    <h2>Book List</h2>
+    <ul id="book-list"></ul>
+
+
+    <script src="/script.js"></script>
+  </body>
+</html>
