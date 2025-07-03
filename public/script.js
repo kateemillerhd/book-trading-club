@@ -173,7 +173,7 @@ async function checkSession() {
   const authForms = document.getElementById("auth-forms");
   const addBook = document.getElementById('add-book-section');
   const settings = document.getElementById('settings-section');
-  cosnt bookList = document.getElementById('book-list-section');
+  const bookList = document.getElementById('book-list-section');
 
   if (data.loggedIn) {
     userInfo.style.display = "block";
