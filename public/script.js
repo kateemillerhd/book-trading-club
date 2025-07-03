@@ -169,16 +169,31 @@ async function checkSession() {
 
   const userInfo = document.getElementById("user-info");
   const userName = document.getElementById("user-name");
+  const userLocation = document.getElementById('user-location');
   const authForms = document.getElementById("auth-forms");
+  const addBook = document.getElementById('add-book-section');
+  const settings = document.getElementById('settings-section');
+  cosnt bookList = document.getElementById('book-list-section');
 
   if (data.loggedIn) {
     userInfo.style.display = "block";
-    authForms.style.display = "none";
     userName.textContent = data.user.fullName || data.user.username;
+
+    const location = [data.user.city, data.user.state].filter(Boolean).join(', ');
+    userLocation.textContent = location ? `Location: ${location}` : '';
+   
+    authForms.style.display = 'none';
+    addBook.style.display = 'block';
+    settings.style.display = 'block';
+    bookList.style.display = 'block';
+    
     currentUsername = data.user.username;
   } else {
     userInfo.style.display = "none";
     authForms.style.display = "block";
+    addBook.style.display = 'none';
+    settings.style.display = 'none';
+    bookList.style.display = 'none';
     currentUsername = null;
   }
 }
