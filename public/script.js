@@ -23,74 +23,74 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const settingsForm = document.getElementById('settings-form');
+  const settingsForm = document.getElementById("settings-form");
   if (settingsForm) {
-    settingsForm.addEventListener('submit', async (e) => {
+    settingsForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const fullName = document.getElementById('full-name').value;
-      const city = document.getElementById('city').value;
-      const state = document.getElementById('state').value;
+      const fullName = document.getElementById("full-name").value;
+      const city = document.getElementById("city").value;
+      const state = document.getElementById("state").value;
 
-      const res = await fetch('/api/users/settings', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullName, city, state })
+      const res = await fetch("/api/users/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fullName, city, state }),
       });
 
-      alert(res.ok ? 'Settings updated' : 'Failed to update settings');
+      alert(res.ok ? "Settings updated" : "Failed to update settings");
     });
   }
 
-  const loginForm = document.getElementById('login-form');
+  const loginForm = document.getElementById("login-form");
   if (loginForm) {
-    loginForm.addEventListener('submit', async (e) => {
+    loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const form = e.target;
       const formData = new URLSearchParams(new FormData(form));
 
-      const res = await fetch('/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData
+      const res = await fetch("/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData,
       });
 
       if (res.redirected) {
         window.location.href = res.url;
       } else {
-        alert('Login failed');
+        alert("Login failed");
       }
     });
   }
 
-  const registerForm = document.getElementById('register-form');
+  const registerForm = document.getElementById("register-form");
   if (registerForm) {
-    registerForm.addEventListener('submit', async (e) => {
+    registerForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const form = e.target;
       const formData = new URLSearchParams(new FormData(form));
 
-      const res = await fetch('/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData
+      const res = await fetch("/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData,
       });
 
       const result = await res.json();
 
       if (res.ok) {
-        alert('Registration successful');
+        alert("Registration successful");
         checkSession();
         fetchBooks();
       } else {
-        alert('Registration failed: ' + result.error)
+        alert("Registration failed: " + result.error);
       }
     });
   }
 
-  const logoutBtn = document.getElementById('logout-btn');
+  const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
-      await fetch('/auth/logout');
+    logoutBtn.addEventListener("click", async () => {
+      await fetch("/auth/logout");
       checkSession();
       fetchBooks();
     });
@@ -98,40 +98,46 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function fetchBooks() {
-  const bookList = document.getElementById('book-list');
+  const bookList = document.getElementById("book-list");
   if (!bookList) return;
 
-  const res = await fetch('/api/books');
+  const res = await fetch("/api/books");
   const books = await res.json();
 
-  bookList.innerHTML = books.map(book => {
-    const isOwner = currentUsername && book.owner?.username === currentUsername;
-    const isRequester = currentUsername && book.requestedBy?.username === currentUsername;
+  bookList.innerHTML = books
+    .map((book) => {
+      const isOwner =
+        currentUsername && book.owner?.username === currentUsername;
+      const isRequester =
+        currentUsername && book.requestedBy?.username === currentUsername;
 
-    let buttons = '';
+      let buttons = "";
 
-    if (!isOwner && book.status === "available") {
-      buttons = `<button onclick="requestTrade('${book._id}')">Request Trade</button>`;
-    }
+      if (!isOwner && book.status === "available") {
+        buttons = `<button onclick="requestTrade('${book._id}')">Request Trade</button>`;
+      }
 
-    if (isOwner && book.status === "pending") {
-      buttons = `<button onclick="acceptTrade('${book._id}')">Accept Trade</button>
+      if (isOwner && book.status === "pending") {
+        buttons = `<button onclick="acceptTrade('${book._id}')">Accept Trade</button>
       <button onclick="cancelTrade('${book._id}')">Cancel</button>`;
+      }
 
-    if (isRequester && book.status === "pending") {
-      buttons = `<button onclick="cancelTrade('${book._id}')">Cancel</button>`;
-    }
+      if (isRequester && book.status === "pending") {
+        buttons = `<button onclick="cancelTrade('${book._id}')">Cancel</button>`;
+      }
 
-    const statusMsg = book.status === "pending" && book.requestedBy
-      ? `<em>Trade requested by ${book.requestedBy?.username}</em>`
-      : '';
-      
+      const statusMsg =
+        book.status === "pending" && book.requestedBy
+          ? `<em>Trade requested by ${book.requestedBy?.username}</em>`
+          : "";
+
       return `<li>
-            <strong>${book.title}</strong> (owner: ${book.owner?.username|| 'Unknown'}),br>
+            <strong>${book.title}</strong> (owner: ${book.owner?.username || "Unknown"})<br>
             ${statusMsg}<br>
             ${buttons}
           </li>`;
-  }).join('');
+    })
+    .join("");
 }
 
 async function requestTrade(bookId) {
@@ -149,7 +155,7 @@ async function acceptTrade(bookId) {
 }
 
 async function cancelTrade(bookId) {
-  const res = await fetch(`/spi/books/${bookId}/cancel`, { method: "POST" });
+  const res = await fetch(`/api/books/${bookId}/cancel`, { method: "POST" });
   const data = await res.json();
   alert(data.message || "Trade cancelled");
   fetchBooks();
@@ -158,21 +164,21 @@ async function cancelTrade(bookId) {
 let currentUsername = null;
 
 async function checkSession() {
-  const res = await fetch('/api/users/me');
+  const res = await fetch("/api/users/me");
   const data = await res.json();
 
-  const userInfo = document.getElementById('user-info');
-  const userName = document.getElementById('user-name');
-  const authForms = document.getElementById('auth-forms');
+  const userInfo = document.getElementById("user-info");
+  const userName = document.getElementById("user-name");
+  const authForms = document.getElementById("auth-forms");
 
   if (data.loggedIn) {
-    userInfo.style.display = 'block';
-    authForms.style.display = 'none';
+    userInfo.style.display = "block";
+    authForms.style.display = "none";
     userName.textContent = data.user.fullName || data.user.username;
     currentUsername = data.user.username;
   } else {
-    userInfo.style.display = 'none';
-    authForms.style.display = 'block';
+    userInfo.style.display = "none";
+    authForms.style.display = "block";
     currentUsername = null;
   }
 }
