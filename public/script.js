@@ -105,13 +105,32 @@ async function fetchBooks() {
   const books = await res.json();
 
   bookList.innerHTML = books.map(book => {
-    const tradeButtons = book.status === 'available' && !book.owner?.username.includes(currentUsername)
-    ? `<button onclick="requestTrade('${book._id}')">Request Trade</buttonm>`
-      : book.status === 'pending' 77 book.owner?.username === currentUsername
-    ? `<button onclick="acceptTrade('${book._id}')">Accept Trade</button>`
-      : '';
+    const isOwner = currentUsername && book.owner?.username === currentUsername;
+    const isRequester = currentUsername && book.requestedBy?.username === currentUsername;
 
-      return `<li>${book.title} (owner: ${book.owner?.username || 'Unknown'}) ${tradeButtons}</li>`;
+    let buttons = '';
+
+    if (!isOwner && book.status === "available") {
+      buttons = `<button onclick="requestTrade('${book._id}')">Request Trade</button>`;
+    }
+
+    if (isOwner && book.status === "pending") {
+      buttons = `<button onclick="acceptTrade('${book._id}')">Accept Trade</button>
+      <button onclick="cancelTrade('${book._id}')">Cancel</button>`;
+
+    if (isRequester && book.status === "pending") {
+      buttons = `<button onclick="cancelTrade('${book._id}')">Cancel</button>`;
+    }
+
+    const statusMsg = book.status === "pending" && book.requestedBy
+      ? `<em>Trade requested by ${book.requestedBy?.username}</em>`
+      : '';
+      
+      return `<li>
+            <strong>${book.title}</strong> (owner: ${book.owner?.username|| 'Unknown'}),br>
+            ${statusMsg}<br>
+            ${buttons}
+          </li>`;
   }).join('');
 }
 
@@ -129,6 +148,8 @@ async function acceptTrade(bookId) {
   fetchBooks();
 }
 
+let currentUsername = null;
+
 async function checkSession() {
   const res = await fetch('/api/users/me');
   const data = await res.json();
@@ -141,8 +162,10 @@ async function checkSession() {
     userInfo.style.display = 'block';
     authForms.style.display = 'none';
     userName.textContent = data.user.fullName || data.user.username;
+    currentUsername = data.user.username;
   } else {
     userInfo.style.display = 'none';
     authForms.style.display = 'block';
+    currentUsername = null;
   }
 }
