@@ -1,4 +1,4 @@
-# book-club-app
+# book-trading-club
 
 This is a full-stack web application for managing a book trading club, build with
 Node.js and Express on Replit, and hosted on GitHub. Users can add books, update personal settings, and propose/accept trades with other members.
