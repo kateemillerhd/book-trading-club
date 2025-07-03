@@ -148,6 +148,13 @@ async function acceptTrade(bookId) {
   fetchBooks();
 }
 
+async function cancelTrade(bookId) {
+  const res = await fetch(`/spi/books/${bookId}/cancel`, { method: "POST" });
+  const data = await res.json();
+  alert(data.message || "Trade cancelled");
+  fetchBooks();
+}
+
 let currentUsername = null;
 
 async function checkSession() {
